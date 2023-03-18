@@ -154,6 +154,7 @@ const UploadPost = ({ active, close }) => {
             </div>
 
             <button
+              disabled={!postImg}
               type="submit"
               className="w-full p-2 my-2 bg-blue-500 text-white/80 rounded-md"
             >

@@ -60,7 +60,7 @@ const Signin = () => {
         </header>
       </div>
       <div className="max-w-6xl w-full px-3 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-5 flex-col md:flex-row justify-between items-center">
-        <div className="max-w-lg">
+        <div className="hidden md:block max-w-lg">
           <span className="flex items-end ">
             <h1 className="text-blue-500 text-4xl md:text-7xl font-bold">
               Pesbook.
@@ -175,20 +175,20 @@ const Signin = () => {
           <div className="flex gap-5 justify-center items-center py-3">
             <button
               onClick={googleSignin}
-              className="border py-3 px-5 shadow-md bg-white text-black rounded-full flex items-center gap-3 shrink-0"
+              className="border p-2 shadow-md bg-white text-black rounded-full flex items-center gap-3 shrink-0"
             >
-              <span className="text-sm">Signin with Google</span>
+              {/* <span className="text-sm">Signin with Google</span> */}
               <img
-                className="w-5 h-5 object-cover bg-white"
+                className="w-8 h-8 object-cover bg-white"
                 src="https://www.svgrepo.com/show/355037/google.svg"
                 alt=""
               />
             </button>
-            <button className="border py-3 px-5 shadow-md bg-white text-black rounded-full flex items-center gap-3 shrink-0">
-              <span className="text-sm">Signin with Facebook</span>
+            <button className="border p-2 shadow-md bg-white text-black rounded-full flex items-center gap-3 shrink-0">
+              {/* <span className="text-sm">Signin with Facebook</span> */}
 
               <img
-                className="w-5 h-5 object-cover bg-white"
+                className="w-8 h-8 object-cover bg-white"
                 src="https://www.svgrepo.com/show/111202/facebook.svg"
                 alt=""
               />

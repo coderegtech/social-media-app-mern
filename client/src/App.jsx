@@ -6,6 +6,7 @@ import Home from "./views/Home";
 import Login from "./views/Login";
 import Profile from "./views/Profile";
 import Signin from "./views/Signin";
+import ViewPost from "./views/ViewPost";
 function App() {
   const isLoading = useUsersStore((state) => state.isLoading);
 
@@ -19,6 +20,7 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="profile/:id" element={<Profile />} />
+            <Route path="post/:id" element={<ViewPost />} />
           </Route>
 
           <Route path="*" element={<ErrorPage />} />

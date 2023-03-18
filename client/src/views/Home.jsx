@@ -5,6 +5,7 @@ import { RiLiveFill } from "react-icons/ri";
 import Contacts from "../components/Contacts";
 import Header from "../components/Header";
 import SideMenu from "../components/SideMenu";
+import Stories from "../components/Stories";
 import UploadPost from "../components/UploadPost";
 import Posts from "../features/post/Posts";
 import useUsersStore from "../features/users/useUsersStore";
@@ -20,14 +21,16 @@ const Home = () => {
       <div className="bg-black h-full w-full relative top-[60px] ">
         <div className="relative max-w-6xl mx-auto flex ">
           {/* sidemenu */}
-          <div className="bg-black hidden lg:block sticky top-16  h-[calc(100vh-70px)] max-w-[280px] w-full py-5 px-2  overflow-y-auto">
+          <div className=" bg-black hidden xl:block sticky top-16  h-[calc(100vh-70px)] max-w-[280px] w-full py-5 px-2  overflow-y-auto">
             <SideMenu />
           </div>
           {/* newsfeed */}
-          <div className="w-full  p-3 md:p-5 bg-black">
+          <div className="w-full md:max-w-xl p-3 md:p-5 bg-black">
+            {/* Stories */}
+            <Stories />
             <div
               onClick={() => setAddPostModal(true)}
-              className="w-full h-auto px-3 py-4 bg-[#111] rounded-xl"
+              className="w-full h-auto px-3 py-4 bg-[#111] rounded-xl mt-3"
             >
               <div className="w-full h-full flex gap-3 items-center justify-center pb-3">
                 <img
