@@ -1,17 +1,24 @@
 import jwt from "jsonwebtoken";
 
 const verifyJWT = (req, res, next) => {
-  const token = req.cookies.jwt;
+  try {
+    let token = req.header("Authorization");
+    console.log(token);
+    if (!token) {
+      return res.status(403).send("Access Denied");
+    }
 
-  if (!token) return res.status(401).json("Not logged in!");
+    if (token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length).trimLeft();
+    }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json("Token is not valid!");
-
-    console.log(decoded);
-    // req.email = decoded.user_uid;
-  });
-  next();
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    // req.user = decoded;
+    console.log(req.currentUser);
+    next();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 export default verifyJWT;

@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { googleSignin } from "../Auth";
-import useUsersStore from "../features/users/useUsersStore";
+import useAuthStore from "../features/auth/useAuthStore";
 const Signin = () => {
-  const loginStart = useUsersStore((state) => state.loginStart);
-  const loginError = useUsersStore((state) => state.loginError);
+  const loginStart = useAuthStore((state) => state.loginStart);
+  const loginError = useAuthStore((state) => state.loginError);
   const [passwdShow, setPasswdShow] = useState(false);
   const [user, setUser] = useState({
     firstname: "",

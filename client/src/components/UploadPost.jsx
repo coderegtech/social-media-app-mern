@@ -1,15 +1,17 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import { BsImages } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
+import useAuthStore from "../features/auth/useAuthStore";
 import usePostsStore from "../features/post/usePostsStore";
-import useUsersStore from "../features/users/useUsersStore";
+
 const UploadPost = ({ active, close }) => {
   const [desc, setDesc] = useState("");
   const [postImg, setPostImg] = useState([]);
   const [preview, setPreview] = useState();
 
   const addPost = usePostsStore((state) => state.addPost);
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const fullName = `${currentUser.firstname} ${currentUser.surname}`;
 
   const inputRef = useRef(null);
@@ -45,7 +47,7 @@ const UploadPost = ({ active, close }) => {
     setPreview(URL.createObjectURL(selectedFile));
   };
 
-  const handleUploadPost = (e) => {
+  const handleUploadPost = async (e) => {
     e.preventDefault();
     try {
       let formData = new FormData();
@@ -53,7 +55,16 @@ const UploadPost = ({ active, close }) => {
       formData.append("post_description", desc);
       formData.append("postImg", postImg);
 
-      addPost(formData);
+      const API_URL = "http://localhost:9999/api/post";
+      const config = {
+        headers: {
+          Authorization: `Bearer ${currentUser?.accessToken}`,
+        },
+      };
+
+      // insert the response data to post
+      const response = await axios.post(`${API_URL}/addPost`, formData, config);
+      addPost(response.data);
       // close the upload modal after submitting
       close();
       // handleUploadFile();

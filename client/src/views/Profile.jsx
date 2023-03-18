@@ -9,26 +9,65 @@ import { RiLiveFill, RiShareForwardLine } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import UploadPost from "../components/UploadPost";
+import useAuthStore from "../features/auth/useAuthStore";
 import usePostsStore from "../features/post/usePostsStore";
 import useUsersStore from "../features/users/useUsersStore";
+
 const Profile = () => {
   const [like, setLike] = useState(false);
   const [addPostModal, setAddPostModal] = useState(false);
 
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const users = useUsersStore((state) => state.users);
+  const loading = useUsersStore((state) => state.loading);
+  const getUser = useUsersStore((state) => state.getUser);
   const fullName = `${users?.firstname} ${users?.surname}`;
-  const isLoading = useUsersStore((state) => state.isLoading);
-  const usersStore = useUsersStore();
 
+  const isLoading = usePostsStore((state) => state.isLoading);
+  const fetching = usePostsStore((state) => state.fetching);
+  const isError = usePostsStore((state) => state.isError);
   const posts = usePostsStore((state) => state.posts);
-  const postStore = usePostsStore();
+  const fetchUserPost = usePostsStore((state) => state.fetchUserPost);
 
   const { id } = useParams();
 
+  const API_URL = "http://localhost:9999/api";
+  const config = {
+    headers: {
+      Authorization: `Bearer ${currentUser?.accessToken}`,
+    },
+  };
+
   useEffect(() => {
-    usersStore.getUser(id);
-    postStore.fetchUserPost(id);
+    const getUserPost = async () => {
+      fetching();
+      await axios
+        .get(`${API_URL}/post/getUserPost/${currentUser?.user_uid}`, config)
+        .then((response) => {
+          fetchUserPost(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          isError(err);
+        });
+    };
+
+    const getCurrentUser = async () => {
+      loading();
+      await axios
+        .get(`${API_URL}/user/getUser/${currentUser?.user_uid}`, config)
+        .then((response) => {
+          getUser(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    if (!isLoading) {
+      getUserPost();
+      getCurrentUser();
+    }
   }, []);
 
   return (

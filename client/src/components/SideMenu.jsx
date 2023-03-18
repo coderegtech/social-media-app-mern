@@ -4,9 +4,9 @@ import { FaUserFriends } from "react-icons/fa";
 import { ImClock } from "react-icons/im";
 import { MdGroups, MdOndemandVideo } from "react-icons/md";
 import { Link } from "react-router-dom";
-import useUsersStore from "../features/users/useUsersStore";
+import useAuthStore from "../features/auth/useAuthStore";
 const SideMenu = () => {
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const fullName = `${currentUser.firstname} ${currentUser.surname}`;
 
   return (

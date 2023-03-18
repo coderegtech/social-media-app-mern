@@ -1,3 +1,4 @@
+import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
@@ -5,21 +6,45 @@ import { BsThreeDots } from "react-icons/bs";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import useAuthStore from "../auth/useAuthStore";
 import useUsersStore from "../users/useUsersStore";
 import usePostsStore from "./usePostsStore";
 const Posts = () => {
   const [like, setLike] = useState(false);
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const users = useUsersStore((state) => state.users);
-  const userStore = useUsersStore();
 
   const posts = usePostsStore((state) => state.posts);
   const isLoading = usePostsStore((state) => state.isLoading);
-  const postStore = usePostsStore();
+  const fetching = usePostsStore((state) => state.fetching);
+  const isError = usePostsStore((state) => state.isError);
+  const fetchAllPost = usePostsStore((state) => state.fetchAllPost);
+
+  const API_URL = "http://localhost:9999/api";
+  const config = {
+    headers: {
+      Authorization: `Bearer ${currentUser?.accessToken}`,
+    },
+  };
 
   useEffect(() => {
-    postStore.fetchAllPost();
-    userStore.getAllUsers();
+    const fetchPosts = async () => {
+      fetching();
+
+      await axios
+        .get(`${API_URL}/post/getAllPosts`, config)
+        .then((response) => {
+          fetchAllPost(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          isError(err);
+        });
+    };
+
+    // const getAllUsers = async () => {};
+    if (!isLoading) fetchPosts();
+    // getAllUsers();
   }, []);
 
   return (

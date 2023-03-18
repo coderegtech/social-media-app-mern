@@ -5,7 +5,7 @@ import verifyJWT from "../middleware/verifyJWT.js";
 const router = express.Router();
 
 router.post("/addPost", upload.single("postImg"), verifyJWT, addPost);
-router.get("/getAllPosts", getAllPosts);
+router.get("/getAllPosts", verifyJWT, getAllPosts);
 router.get("/getUserPost/:user_uid", verifyJWT, getUserPost);
 
 export default router;

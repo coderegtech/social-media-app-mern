@@ -3,10 +3,10 @@ import { AiFillHome } from "react-icons/ai";
 import { BsMessenger, BsSearch } from "react-icons/bs";
 import { RiNotification3Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import useUsersStore from "../features/users/useUsersStore";
+import useAuthStore from "../features/auth/useAuthStore";
 import Menu from "./Menu";
 const Header = () => {
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const [dropDownMenu, setDropDownMenu] = useState(false);
 
   return (
@@ -50,7 +50,7 @@ const Header = () => {
             <img
               onClick={() => setDropDownMenu(!dropDownMenu)}
               className="w-10 h-10 object-cover object-center rounded-full"
-              src={`http://localhost:9999/profile/${currentUser.profilePic}`}
+              src={`http://localhost:9999/profile/${currentUser?.profilePic}`}
               alt=""
             />
             {dropDownMenu ? <Menu /> : null}

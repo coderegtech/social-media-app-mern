@@ -2,11 +2,11 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { googleSignin } from "../Auth";
-import useUsersStore from "../features/users/useUsersStore";
+import useAuthStore from "../features/auth/useAuthStore";
 const Login = () => {
-  const loginStart = useUsersStore((state) => state.loginStart);
-  const loginSuccess = useUsersStore((state) => state.loginSuccess);
-  const loginError = useUsersStore((state) => state.loginError);
+  const loginStart = useAuthStore((state) => state.loginStart);
+  const loginSuccess = useAuthStore((state) => state.loginSuccess);
+  const loginError = useAuthStore((state) => state.loginError);
 
   // const [currentUser, setCurrentUser] = useState(null);
   const [passwdShow, setPasswdShow] = useState(false);
@@ -31,7 +31,6 @@ const Login = () => {
         }
       )
       .then((response) => {
-        console.log(response.data);
         loginSuccess(response.data);
         navigate("/");
       })

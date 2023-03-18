@@ -9,24 +9,29 @@ const usePostsStore = create(
     posts: [],
     isLoading: false,
     error: null,
-    fetchAllPost: async () => {
-      try {
-        set((state) => ({
-          isLoading: true,
-        }));
-
-        const response = await axios.get(`${API_URL}/getAllPosts`);
-        console.log(response.data);
-        set((state) => ({
-          isLoading: false,
-          posts: response.data,
-        }));
-      } catch (err) {
-        set((state) => ({
-          error: err,
-          isLoading: false,
-        }));
-      }
+    fetching: () => {
+      set((state) => ({
+        isLoading: true,
+      }));
+    },
+    isError: (errorText) => {
+      set((state) => ({
+        isLoading: true,
+        error: errorText,
+      }));
+    },
+    fetchAllPost: (data) => {
+      console.log(data);
+      set((state) => ({
+        isLoading: false,
+        posts: data,
+      }));
+    },
+    addPost: (data) => {
+      set((state) => ({
+        isLoading: false,
+        posts: data,
+      }));
     },
     fetchUserPost: async (user_uid) => {
       try {
@@ -44,24 +49,6 @@ const usePostsStore = create(
         set((state) => ({
           error: err,
           isLoading: false,
-        }));
-      }
-    },
-    addPost: async (post) => {
-      try {
-        set((state) => ({
-          isLoading: true,
-        }));
-
-        const response = await axios.post(`${API_URL}/addPost`, post);
-        console.log(response.data);
-        set((state) => ({
-          isLoading: false,
-          posts: response.data,
-        }));
-      } catch (err) {
-        set((state) => ({
-          error: err,
         }));
       }
     },

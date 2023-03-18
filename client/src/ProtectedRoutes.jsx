@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import useUsersStore from "./features/users/useUsersStore";
+import useAuthStore from "./features/auth/useAuthStore";
 const ProtectedRoutes = () => {
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const location = useLocation();
 
   return currentUser?.user_uid ? (

@@ -1,8 +1,9 @@
 import React from "react";
 import { GrAdd } from "react-icons/gr";
-import useUsersStore from "../features/users/useUsersStore";
+import useAuthStore from "../features/auth/useAuthStore";
+
 const Stories = () => {
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const currentUser = useAuthStore((state) => state.currentUser);
 
   return (
     <div className=" max-h-[230px] h-full bg-[#111] rounded-xl flex gap-3 p-3 overflow-x-hidden">

@@ -2,14 +2,12 @@ import axios from "axios";
 import React from "react";
 import { TbLogout } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
-import useUsersStore from "../features/users/useUsersStore";
+import useAuthStore from "../features/auth/useAuthStore";
 const Menu = () => {
-  const logout = useUsersStore((state) => state.logout);
-  const loginError = useUsersStore((state) => state.loginError);
-
-  const error = useUsersStore((state) => state.error);
-
-  const currentUser = useUsersStore((state) => state.currentUser);
+  const logout = useAuthStore((state) => state.logout);
+  const loginError = useAuthStore((state) => state.loginError);
+  const error = useAuthStore((state) => state.error);
+  const currentUser = useAuthStore((state) => state.currentUser);
   const fullName = `${currentUser.firstname} ${currentUser.surname}`;
   const navigate = useNavigate();
 
