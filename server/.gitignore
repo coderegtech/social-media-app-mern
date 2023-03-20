@@ -1,7 +1,7 @@
 # Logs
-*.env
-*public/post/*
-*public/profile/*
+.env
+public/post/*
+public/profile/*
 
 logs
 *.log
