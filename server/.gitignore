@@ -1,7 +1,5 @@
 # Logs
-.env
-public/post/*
-public/profile/*
+
 
 logs
 *.log
@@ -10,6 +8,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+
+.env
+public/post/*
+public/profile/*
 
 node_modules
 dist
