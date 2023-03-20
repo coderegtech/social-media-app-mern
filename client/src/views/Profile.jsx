@@ -1,15 +1,14 @@
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { BiHappyAlt } from "react-icons/bi";
-import { BsCameraFill, BsThreeDots } from "react-icons/bs";
-import { FaRegCommentAlt } from "react-icons/fa";
+import { BsCameraFill } from "react-icons/bs";
 import { IoMdPhotos } from "react-icons/io";
-import { RiLiveFill, RiShareForwardLine } from "react-icons/ri";
+import { RiLiveFill } from "react-icons/ri";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import UploadPost from "../components/UploadPost";
 import useAuthStore from "../features/auth/useAuthStore";
+import Posts from "../features/post/Posts";
 import usePostsStore from "../features/post/usePostsStore";
 import useUsersStore from "../features/users/useUsersStore";
 
@@ -17,7 +16,9 @@ const Profile = () => {
   const [like, setLike] = useState(false);
   const [addPostModal, setAddPostModal] = useState(false);
 
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const { currentUser, accessToken } = useAuthStore(
+    (state) => state.currentUser
+  );
   const users = useUsersStore((state) => state.users);
   const loading = useUsersStore((state) => state.loading);
   const getUser = useUsersStore((state) => state.getUser);
@@ -34,16 +35,22 @@ const Profile = () => {
   const API_URL = "http://localhost:9999/api";
   const config = {
     headers: {
-      Authorization: `Bearer ${currentUser?.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     },
   };
 
+  const scrollRef = useRef();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
   useEffect(() => {
     const getUserPost = async () => {
       fetching();
       await axios
-        .get(`${API_URL}/post/getUserPost/${currentUser?.user_uid}`, config)
+        .get(`${API_URL}/post/getUserPost/${id}`, config)
         .then((response) => {
+          console.log(response.data);
           fetchUserPost(response.data);
         })
         .catch((err) => {
@@ -52,10 +59,10 @@ const Profile = () => {
         });
     };
 
-    const getCurrentUser = async () => {
+    const getSelectedUser = async () => {
       loading();
       await axios
-        .get(`${API_URL}/user/getUser/${currentUser?.user_uid}`, config)
+        .get(`${API_URL}/user/getUser/${id}`, config)
         .then((response) => {
           getUser(response.data);
         })
@@ -66,13 +73,13 @@ const Profile = () => {
 
     if (!isLoading) {
       getUserPost();
-      getCurrentUser();
+      getSelectedUser();
     }
   }, []);
 
   return (
     <>
-      <div className="w-full h-full bg-black/90 ">
+      <div ref={scrollRef} className="w-full h-full bg-black/90 ">
         <Header />
 
         <div className="bg-black h-full w-full relative top-[60px]">
@@ -88,7 +95,7 @@ const Profile = () => {
             <div className="flex gap-5 items-end md:items-center relative -top-16 left-0 py-5 px-3 border-b border-white/10">
               <div className="relative w-32 h-32 md:w-48 md:h-48 ">
                 <img
-                  className="w-full h-full object-cover rounded-full border-4 border-stone-900"
+                  className={`w-full h-full object-cover rounded-full border-4 border-stone-900 `}
                   src={`http://localhost:9999/profile/${users?.profilePic}`}
                   alt=""
                 />
@@ -231,7 +238,7 @@ const Profile = () => {
                   <div className="w-full h-full flex gap-3 items-center justify-center pb-3">
                     <img
                       className="w-10 h-10 object-cover rounded-full"
-                      src="https://scontent.fmnl13-1.fna.fbcdn.net/v/t1.6435-1/128131566_1401162046721063_3715506702234565360_n.jpg?stp=c0.0.40.40a_cp0_dst-jpg_p40x40&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeG2RpP4g-UuE76SBllHUq8DBrs8hHnRWX8GuzyEedFZf7UFc9z1AXCR1q3vgyfMN8m1szQXFmZO4E6Adog25uFj&_nc_ohc=ju3ZroxzQegAX9eX97h&_nc_ht=scontent.fmnl13-1.fna&oh=00_AfCaPSduulAAY9fjNxZ5A4cP9eOrCHl4XsIG-W2IYqAR4Q&oe=63A06B93"
+                      src={`http://localhost:9999/profile/${currentUser?.profilePic}`}
                       alt=""
                     />
                     <span className="py-2 px-3 w-full bg-white/10 rounded-full text-white/30 cursor-pointer">
@@ -263,120 +270,7 @@ const Profile = () => {
 
                 {/* posts */}
 
-                {isLoading ? (
-                  <h1 className="text-white text-3xl ">Loading....</h1>
-                ) : (
-                  posts?.map(
-                    (
-                      {
-                        post_description,
-                        profilePic,
-                        firstname,
-                        surname,
-                        postImgName,
-                        createdAt,
-                      },
-                      index
-                    ) => {
-                      return (
-                        <div
-                          key={index}
-                          className="w-full h-auto  bg-[#111] rounded-xl my-3"
-                        >
-                          <header className="flex justify-between items-center px-3 py-2">
-                            <div className="flex gap-3 items-center">
-                              <img
-                                className="w-10 h-10 object-cover rounded-full"
-                                src={`http://localhost:9999/profile/${profilePic}`}
-                                alt=""
-                              />
-                              <div className="leading-none">
-                                <p className="text-base text-white/80 font-semibold">
-                                  {firstname} {surname}
-                                </p>
-                                <span className="text-sm text-white/50">
-                                  {moment(createdAt).fromNow()}
-                                </span>
-                              </div>
-                            </div>
-                            <BsThreeDots className="text-white/80 text-base" />
-                          </header>
-
-                          {/* caption */}
-                          <div className="w-full px-3 py-1">
-                            <h1 className="text-white text-base">
-                              {post_description}
-                            </h1>
-                          </div>
-
-                          <div className="w-full min-h-full  bg-[#111] flex items-center justify-center">
-                            <img
-                              className="w-full h-full object-cover"
-                              src={`http://localhost:9999/post/${postImgName}`}
-                              alt=""
-                            />
-                          </div>
-                          <div className=" px-3">
-                            <div className="flex gap-1 justify-around items-center border-y border-white/10 py-1 ">
-                              <div
-                                onClick={() => setLike(!like)}
-                                className="w-full flex gap-2 justify-center items-center py-2 cursor-pointer hover:bg-white/10 rounded-lg duration-300"
-                              >
-                                {like ? (
-                                  <AiFillLike className="text-white text-2xl" />
-                                ) : (
-                                  <AiOutlineLike className="text-white text-2xl" />
-                                )}
-
-                                <p className="text-base text-white/50">Like</p>
-                              </div>
-                              <div className="w-full flex gap-2 justify-center items-center py-2 cursor-pointer hover:bg-white/10 rounded-lg duration-300">
-                                <FaRegCommentAlt className="text-white text-2xl" />
-                                <p className="text-base text-white/50">
-                                  Comment
-                                </p>
-                              </div>
-                              <div className="w-full flex gap-2 justify-center items-center py-2 cursor-pointer hover:bg-white/10 rounded-lg duration-300">
-                                <RiShareForwardLine className="text-white text-2xl" />
-                                <p className="text-base text-white/50">Share</p>
-                              </div>
-                            </div>
-                            <div className="pt-3">
-                              <form
-                                className="flex gap-3 items-center"
-                                onSubmit={(e) => e.preventDefault()}
-                              >
-                                <img
-                                  className="w-8 h-8 object-cover rounded-full"
-                                  src={`http://localhost:9999/profile/${currentUser.profilePic}`}
-                                  alt=""
-                                />
-                                <input
-                                  className="py-2 px-3 w-full bg-white/10 rounded-full text-white cursor-pointer focus:outline-none placeholder:text-white/20"
-                                  type="text"
-                                  placeholder="Write a comment..."
-                                />
-                              </form>
-                              {/* comments */}
-                              <div className="py-3 flex gap-3 items-start">
-                                <img
-                                  className="w-8 h-8 object-cover rounded-full"
-                                  src="https://scontent.fmnl13-1.fna.fbcdn.net/v/t1.6435-1/128131566_1401162046721063_3715506702234565360_n.jpg?stp=c0.0.40.40a_cp0_dst-jpg_p40x40&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeG2RpP4g-UuE76SBllHUq8DBrs8hHnRWX8GuzyEedFZf7UFc9z1AXCR1q3vgyfMN8m1szQXFmZO4E6Adog25uFj&_nc_ohc=ju3ZroxzQegAX9eX97h&_nc_ht=scontent.fmnl13-1.fna&oh=00_AfCaPSduulAAY9fjNxZ5A4cP9eOrCHl4XsIG-W2IYqAR4Q&oe=63A06B93"
-                                  alt=""
-                                />
-                                <div className="bg-white/10 rounded-2xl p-2 max-w-sm">
-                                  <p className="text-sm text-white/80">
-                                    this is a comment
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
-                  )
-                )}
+                <Posts posts={posts} />
               </div>
             </div>
           </div>

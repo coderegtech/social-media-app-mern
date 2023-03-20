@@ -44,6 +44,6 @@ app.use("/api/user", userRoutes);
 app.listen(PORT, (res, err) => {
   if (err) res.json({ error: err });
 
-  console.log("Server running to port " + PORT);
+  console.log("Server running to port http://localhost:" + PORT);
   connectDb();
 });

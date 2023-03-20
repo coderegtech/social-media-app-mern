@@ -11,7 +11,9 @@ const UploadPost = ({ active, close }) => {
   const [preview, setPreview] = useState();
 
   const addPost = usePostsStore((state) => state.addPost);
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const { currentUser, accessToken } = useAuthStore(
+    (state) => state.currentUser
+  );
   const fullName = `${currentUser.firstname} ${currentUser.surname}`;
 
   const inputRef = useRef(null);
@@ -58,7 +60,7 @@ const UploadPost = ({ active, close }) => {
       const API_URL = "http://localhost:9999/api/post";
       const config = {
         headers: {
-          Authorization: `Bearer ${currentUser?.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       };
 
@@ -143,7 +145,7 @@ const UploadPost = ({ active, close }) => {
                   className="w-full h-full"
                   name="postImg"
                   type="file"
-                  accept="image/png,image/jpeg,image/jpg"
+                  accept="image/png,image/jpeg,image/jpg,video/*"
                   hidden
                 />
 

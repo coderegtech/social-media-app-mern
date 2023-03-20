@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/addPost", upload.single("postImg"), verifyJWT, addPost);
 router.get("/getAllPosts", verifyJWT, getAllPosts);
-router.get("/getUserPost/:user_uid", verifyJWT, getUserPost);
+router.get("/getUserPost/:id", verifyJWT, getUserPost);
 
 export default router;

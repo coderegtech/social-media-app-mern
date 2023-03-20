@@ -50,7 +50,7 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
       { id: foundUser.user_uid },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "30min" }
+      { expiresIn: "1h" }
     );
 
     const refreshToken = jwt.sign(
@@ -61,7 +61,7 @@ const login = async (req, res) => {
 
     // change isOnline to true
     foundUser.isOnline = true;
-    // Saving refreshToken with current user
+    // Saving accessToken with current user
     foundUser.accessToken = accessToken;
     await foundUser.save();
 
@@ -75,7 +75,7 @@ const login = async (req, res) => {
     });
 
     // Send authorization roles and acces  s token to user
-    res.status(200).json(currentUser);
+    res.status(200).json({ accessToken, currentUser });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

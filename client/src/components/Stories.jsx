@@ -3,14 +3,14 @@ import { GrAdd } from "react-icons/gr";
 import useAuthStore from "../features/auth/useAuthStore";
 
 const Stories = () => {
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const { currentUser } = useAuthStore((state) => state.currentUser);
 
   return (
     <div className=" max-h-[230px] h-full bg-[#111] rounded-xl flex gap-3 p-3 overflow-x-hidden">
       <div className="h-full min-w-[130px] bg-[#111] rounded-xl overflow-hidden shadow-lg border border-black/10">
         <div className="relative">
           <img
-            className="h-[150px] object-cover"
+            className="h-[150px] w-full object-cover"
             src={`http://localhost:9999/profile/${currentUser.profilePic}`}
             alt=""
           />

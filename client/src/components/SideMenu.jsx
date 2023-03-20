@@ -6,7 +6,7 @@ import { MdGroups, MdOndemandVideo } from "react-icons/md";
 import { Link } from "react-router-dom";
 import useAuthStore from "../features/auth/useAuthStore";
 const SideMenu = () => {
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const { currentUser } = useAuthStore((state) => state.currentUser);
   const fullName = `${currentUser.firstname} ${currentUser.surname}`;
 
   return (

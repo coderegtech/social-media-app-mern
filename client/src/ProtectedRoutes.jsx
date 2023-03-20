@@ -4,7 +4,7 @@ const ProtectedRoutes = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
   const location = useLocation();
 
-  return currentUser?.user_uid ? (
+  return currentUser?.accessToken ? (
     <Outlet />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

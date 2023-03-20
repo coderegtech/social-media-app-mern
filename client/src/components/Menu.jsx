@@ -7,7 +7,7 @@ const Menu = () => {
   const logout = useAuthStore((state) => state.logout);
   const loginError = useAuthStore((state) => state.loginError);
   const error = useAuthStore((state) => state.error);
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const { currentUser } = useAuthStore((state) => state.currentUser);
   const fullName = `${currentUser.firstname} ${currentUser.surname}`;
   const navigate = useNavigate();
 

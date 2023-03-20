@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import useAuthStore from "../features/auth/useAuthStore";
 import Menu from "./Menu";
 const Header = () => {
-  const currentUser = useAuthStore((state) => state.currentUser);
+  const { currentUser } = useAuthStore((state) => state.currentUser);
   const [dropDownMenu, setDropDownMenu] = useState(false);
 
   return (

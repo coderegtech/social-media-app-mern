@@ -40,8 +40,10 @@ const getAllPosts = async (req, res) => {
 
 const getUserPost = async (req, res) => {
   try {
-    const { user_uid } = req.params;
-    const posts = await Post.find({ user_uid }).sort("-createdAt");
+    const { id } = req.params;
+    const posts = await Post.find({ user_uid: id }).sort("-createdAt");
+    console.log(posts);
+
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json({ error: err.message });

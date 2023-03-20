@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { BiHappyAlt } from "react-icons/bi";
 import { IoMdPhotos } from "react-icons/io";
 import { RiLiveFill } from "react-icons/ri";
@@ -9,10 +10,59 @@ import Stories from "../components/Stories";
 import UploadPost from "../components/UploadPost";
 import useAuthStore from "../features/auth/useAuthStore";
 import Posts from "../features/post/Posts";
+import usePostsStore from "../features/post/usePostsStore";
 const Home = () => {
-  const [like, setLike] = useState(false);
   const [addPostModal, setAddPostModal] = useState(false);
-  const { firstname, profilePic } = useAuthStore((state) => state.currentUser);
+  const {
+    currentUser: { firstname, profilePic },
+    accessToken,
+  } = useAuthStore((state) => state.currentUser);
+
+  const posts = usePostsStore((state) => state.posts);
+  const isLoading = usePostsStore((state) => state.isLoading);
+  const fetching = usePostsStore((state) => state.fetching);
+  const isError = usePostsStore((state) => state.isError);
+  const fetchAllPost = usePostsStore((state) => state.fetchAllPost);
+
+  const API_URL = "http://localhost:9999/api";
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      fetching();
+
+      await axios
+        .get(`${API_URL}/post/getAllPosts`, config)
+        .then((response) => {
+          fetchAllPost(response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          isError(err);
+        });
+    };
+
+    // const fetchAllUser = async () => {
+    //   loading();
+    //   await axios
+    //     .get(`${API_URL}/user/users`, config)
+    //     .then((response) => {
+    //       getUser(response.data);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // };
+
+    if (!isLoading) {
+      fetchPosts();
+      // fetchAllUser();
+    }
+  }, []);
 
   return (
     <div className="relative w-full h-auto bg-black ">
@@ -64,7 +114,7 @@ const Home = () => {
           />
 
           {/* posts */}
-          <Posts />
+          <Posts posts={posts} />
         </div>
 
         {/* events & users */}
