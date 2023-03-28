@@ -53,7 +53,6 @@ const UploadPost = ({ active, close }) => {
     e.preventDefault();
     try {
       let formData = new FormData();
-      formData.append("user_uid", currentUser.user_uid);
       formData.append("post_description", desc);
       formData.append("postImg", postImg);
 

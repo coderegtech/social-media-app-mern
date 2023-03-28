@@ -44,6 +44,7 @@ const Profile = () => {
     top: 0,
     behavior: "smooth",
   });
+
   useEffect(() => {
     const getUserPost = async () => {
       fetching();

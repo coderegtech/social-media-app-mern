@@ -50,4 +50,17 @@ const getUserPost = async (req, res) => {
   }
 };
 
-export { addPost, getAllPosts, getUserPost };
+const deleteUserPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const posts = await Post.deleteOne({ postId: id });
+    console.log(posts);
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export { addPost, getAllPosts, getUserPost, deleteUserPost };

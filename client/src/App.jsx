@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import useUsersStore from "./features/users/useUsersStore";
 import ProtectedRoutes from "./ProtectedRoutes";
 import ErrorPage from "./views/ErrorPage";
 import Home from "./views/Home";
@@ -8,8 +7,6 @@ import Profile from "./views/Profile";
 import Signin from "./views/Signin";
 import ViewPost from "./views/ViewPost";
 function App() {
-  const isLoading = useUsersStore((state) => state.isLoading);
-
   return (
     <>
       <Router>
@@ -20,7 +17,7 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Home />} />
             <Route path="profile/:id" element={<Profile />} />
-            <Route path="post/:id" element={<ViewPost />} />
+            <Route path="post/:postId" element={<ViewPost />} />
           </Route>
 
           <Route path="*" element={<ErrorPage />} />

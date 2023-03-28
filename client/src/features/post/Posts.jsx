@@ -1,7 +1,8 @@
+import axios from "axios";
 import moment from "moment";
 import React, { useState } from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { BsThreeDots } from "react-icons/bs";
+import { BsThreeDots, BsTrash } from "react-icons/bs";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
@@ -12,19 +13,44 @@ import usePostsStore from "./usePostsStore";
 
 const Posts = ({ posts }) => {
   const [like, setLike] = useState(false);
-  const { currentUser } = useAuthStore((state) => state.currentUser);
+  const [comment, setComment] = useState("");
+  const { currentUser, accessToken } = useAuthStore(
+    (state) => state.currentUser
+  );
   const users = useUsersStore((state) => state.users);
   const loading = useUsersStore((state) => state.loading);
   const getUser = useUsersStore((state) => state.getUser);
 
   const isLoading = usePostsStore((state) => state.isLoading);
+  const deletePost = usePostsStore((state) => state.deletePost);
 
-  const handleDeletePost = (id) => {
-    const selectedPost = posts.filter(
-      (post) => post.user_uid === currentUser.user_uid
-    );
-    console.log(selectedPost.find((post) => post.postId === id));
+  const API_URL = "http://localhost:9999/api/post";
+  const config = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   };
+
+  const handleDeletePost = async (id) => {
+    try {
+      const alertMsg = window.confirm("Do you want to remove this post?");
+
+      if (alertMsg) {
+        const response = await axios.delete(
+          `${API_URL}/deletePost/${id}`,
+          config
+        );
+        console.log(response);
+        deletePost(id);
+      }
+
+      // insert the response data to post
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAddComment = async (postId) => {};
 
   return (
     <>
@@ -68,10 +94,14 @@ const Posts = ({ posts }) => {
                       </span>
                     </div>
                   </div>
-                  <BsThreeDots
-                    onClick={() => handleDeletePost(postId)}
-                    className="text-white/80 text-base"
-                  />
+                  {currentUser.user_uid === user_uid ? (
+                    <BsTrash
+                      onClick={() => handleDeletePost(postId)}
+                      className="text-white/80 text-lg hover:text-red-500"
+                    />
+                  ) : (
+                    <BsThreeDots className="text-white/80 text-base" />
+                  )}
                 </header>
 
                 {/* caption */}
@@ -87,13 +117,15 @@ const Posts = ({ posts }) => {
                   </h1>
                 </div>
 
-                <div className="w-full h-full bg-[#111] flex items-center justify-center">
-                  <img
-                    className="w-full h-full object-cover"
-                    src={`http://localhost:9999/post/${postImgName}`}
-                    alt=""
-                  />
-                </div>
+                <Link to={`post/${postId}`}>
+                  <div className="w-full h-full bg-[#111] p-3">
+                    <img
+                      className="w-full h-full object-cover rounded-xl"
+                      src={`http://localhost:9999/post/${postImgName}`}
+                      alt=""
+                    />
+                  </div>
+                </Link>
                 <div className=" px-3">
                   <div className="flex gap-1 justify-around items-center border-y border-white/10 py-1 ">
                     <div
@@ -120,7 +152,7 @@ const Posts = ({ posts }) => {
                   <div className="pt-3">
                     <form
                       className="flex gap-3 items-center"
-                      onSubmit={(e) => e.preventDefault()}
+                      onSubmit={() => handleAddComment(postId)}
                     >
                       <img
                         className="w-8 h-8 object-cover rounded-full"
@@ -128,6 +160,8 @@ const Posts = ({ posts }) => {
                         alt=""
                       />
                       <input
+                        onChange={(e) => setComment(e.target.value)}
+                        value={comment}
                         className="py-2 px-3 w-full bg-white/10 rounded-full text-white cursor-pointer focus:outline-none placeholder:text-white/20"
                         type="text"
                         placeholder="Write a comment..."

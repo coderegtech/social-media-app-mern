@@ -4,6 +4,7 @@ import { devtools } from "zustand/middleware";
 const usePostsStore = create(
   devtools((set) => ({
     posts: [],
+    comments: [],
     isLoading: false,
     error: null,
     fetching: () => {
@@ -18,6 +19,12 @@ const usePostsStore = create(
       }));
     },
     fetchAllPost: (data) => {
+      set((state) => ({
+        isLoading: false,
+        posts: data,
+      }));
+    },
+    fetchSelectedPost: (data) => {
       set((state) => ({
         isLoading: false,
         posts: data,
@@ -38,7 +45,15 @@ const usePostsStore = create(
     deletePost: (id) => {
       set((state) => ({
         isLoading: false,
-        posts: state.posts.filter((post) => post._id != id),
+        posts: state.posts.filter((post) => post.postId !== id),
+      }));
+    },
+
+    // posts comments
+    addComment: (data) => {
+      set((state) => ({
+        isLoading: false,
+        comments: data,
       }));
     },
   }))
