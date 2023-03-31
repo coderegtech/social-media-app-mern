@@ -2,13 +2,18 @@ import axios from "axios";
 import moment from "moment";
 import React, { useState } from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { BsThreeDots, BsTrash } from "react-icons/bs";
+import {
+  BsFillArrowRightCircleFill,
+  BsThreeDots,
+  BsTrash,
+} from "react-icons/bs";
 import { FaRegCommentAlt } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import Loading from "../../components/Loading";
 import useAuthStore from "../auth/useAuthStore";
 import useUsersStore from "../users/useUsersStore";
+import Comments from "./Comments";
 import usePostsStore from "./usePostsStore";
 
 const Posts = ({ posts }) => {
@@ -21,8 +26,10 @@ const Posts = ({ posts }) => {
   const loading = useUsersStore((state) => state.loading);
   const getUser = useUsersStore((state) => state.getUser);
 
+  const fetching = usePostsStore((state) => state.fetching);
   const isLoading = usePostsStore((state) => state.isLoading);
   const deletePost = usePostsStore((state) => state.deletePost);
+  const addComment = usePostsStore((state) => state.addComment);
 
   const API_URL = "http://localhost:9999/api/post";
   const config = {
@@ -50,7 +57,27 @@ const Posts = ({ posts }) => {
     }
   };
 
-  const handleAddComment = async (postId) => {};
+  const handleAddComment = async (postId) => {
+    try {
+      fetching();
+
+      const response = await axios.post(
+        `${API_URL}/addComment`,
+        {
+          postId,
+          comment,
+        },
+        config
+      );
+
+      addComment(response.data);
+
+      setComment("");
+      // insert the response data to post
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -67,6 +94,7 @@ const Posts = ({ posts }) => {
             user_uid,
             postImgName,
             createdAt,
+            comments,
           }) => {
             return (
               <div
@@ -149,37 +177,36 @@ const Posts = ({ posts }) => {
                       <p className="text-base text-white/50">Share</p>
                     </div>
                   </div>
-                  <div className="pt-3">
+                  <div className="py-3">
+                    {/* comments */}
+                    <Comments postId={postId} comments={comments} />
+
                     <form
-                      className="flex gap-3 items-center"
-                      onSubmit={() => handleAddComment(postId)}
+                      className=" py-2 flex gap-3 items-center"
+                      onSubmit={(e) =>
+                        handleAddComment(postId, e.preventDefault())
+                      }
                     >
                       <img
                         className="w-8 h-8 object-cover rounded-full"
                         src={`http://localhost:9999/profile/${currentUser.profilePic}`}
                         alt=""
                       />
-                      <input
-                        onChange={(e) => setComment(e.target.value)}
-                        value={comment}
-                        className="py-2 px-3 w-full bg-white/10 rounded-full text-white cursor-pointer focus:outline-none placeholder:text-white/20"
-                        type="text"
-                        placeholder="Write a comment..."
-                      />
-                    </form>
-                    {/* comments */}
-                    <div className="py-3 flex gap-3 items-start">
-                      <img
-                        className="w-8 h-8 object-cover rounded-full"
-                        src="https://scontent.fmnl13-1.fna.fbcdn.net/v/t1.6435-1/128131566_1401162046721063_3715506702234565360_n.jpg?stp=c0.0.40.40a_cp0_dst-jpg_p40x40&_nc_cat=105&ccb=1-7&_nc_sid=7206a8&_nc_eui2=AeG2RpP4g-UuE76SBllHUq8DBrs8hHnRWX8GuzyEedFZf7UFc9z1AXCR1q3vgyfMN8m1szQXFmZO4E6Adog25uFj&_nc_ohc=ju3ZroxzQegAX9eX97h&_nc_ht=scontent.fmnl13-1.fna&oh=00_AfCaPSduulAAY9fjNxZ5A4cP9eOrCHl4XsIG-W2IYqAR4Q&oe=63A06B93"
-                        alt=""
-                      />
-                      <div className="bg-white/10 rounded-2xl p-2 max-w-sm">
-                        <p className="text-sm text-white/80">
-                          this is a comment
-                        </p>
+
+                      <div className="relative w-full">
+                        <input
+                          onChange={(e) => setComment(e.target.value)}
+                          value={comment}
+                          className=" py-2 px-3 w-full bg-white/10 rounded-full text-white cursor-pointer focus:outline-none placeholder:text-white/20"
+                          type="text"
+                          placeholder="Write a comment..."
+                        />
+
+                        <button type="submit" disabled={!comment}>
+                          <BsFillArrowRightCircleFill className="text-3xl absolute right-2 text-white/20 top-1/2 -translate-y-1/2" />
+                        </button>
                       </div>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>

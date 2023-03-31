@@ -4,6 +4,7 @@ import { BsImages } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 import useAuthStore from "../features/auth/useAuthStore";
 import usePostsStore from "../features/post/usePostsStore";
+import { AlertMsg } from "./AlertMsg";
 
 const UploadPost = ({ active, close }) => {
   const [desc, setDesc] = useState("");
@@ -66,6 +67,7 @@ const UploadPost = ({ active, close }) => {
       // insert the response data to post
       const response = await axios.post(`${API_URL}/addPost`, formData, config);
       addPost(response.data);
+      AlertMsg("good", "Post Uploaded!");
       // close the upload modal after submitting
       close();
       // handleUploadFile();
@@ -73,6 +75,7 @@ const UploadPost = ({ active, close }) => {
       setPreview(null);
     } catch (err) {
       console.log(err);
+      AlertMsg("error", err.message);
     }
   };
 

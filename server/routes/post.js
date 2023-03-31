@@ -1,6 +1,8 @@
 import express from "express";
 import {
+  addCommentPost,
   addPost,
+  deleteUserComment,
   deleteUserPost,
   getAllPosts,
   getUserPost,
@@ -13,4 +15,9 @@ router.post("/addPost", upload.single("postImg"), verifyJWT, addPost);
 router.get("/getAllPosts", verifyJWT, getAllPosts);
 router.get("/getUserPost/:id", verifyJWT, getUserPost);
 router.delete("/deletePost/:id", verifyJWT, deleteUserPost);
+
+// comments
+router.post("/addComment", verifyJWT, addCommentPost);
+router.delete("/deleteComment", verifyJWT, deleteUserComment);
+
 export default router;

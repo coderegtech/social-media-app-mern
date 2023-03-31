@@ -12,7 +12,7 @@ const verifyJWT = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.user = decoded.id;
+    req.user_uid = decoded.id;
     next();
   } catch (err) {
     res.status(500).json({ error: err.message });

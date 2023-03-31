@@ -53,7 +53,7 @@ const usePostsStore = create(
     addComment: (data) => {
       set((state) => ({
         isLoading: false,
-        comments: data,
+        posts: data,
       }));
     },
   }))

@@ -3,10 +3,10 @@ import { BiHappyAlt } from "react-icons/bi";
 import { IoMdPhotos } from "react-icons/io";
 import { RiLiveFill } from "react-icons/ri";
 import Post from "../features/post/Post";
-import Contacts from "./Utils/Contacts";
-import Header from "./Utils/Header";
-import SideMenu from "./Utils/SideMenu";
-import UploadPost from "./Utils/UploadPost";
+import Contacts from "../components/Pages/Utils/Contacts";
+import Header from "../components/Pages/Utils/Header";
+import SideMenu from "../components/Pages/Utils/SideMenu";
+import UploadPost from "../components/Pages/Utils/UploadPost";
 const Main = () => {
   const [addPostModal, setAddPostModal] = useState(false);
 

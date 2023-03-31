@@ -1,4 +1,4 @@
-export const alertMsg = (status, msg) => {
+export const AlertMsg = (status, msg) => {
   return (
     <div
       className={`${
@@ -7,7 +7,7 @@ export const alertMsg = (status, msg) => {
           : status === "good"
           ? "bg-[green]"
           : null
-      } flex justify-between items-center w-24 p-2`}
+      } absolute top-5 flex justify-between items-center w-24 p-2`}
     >
       <p className="text-white text-base">{msg}</p>
       <span>x</span>
