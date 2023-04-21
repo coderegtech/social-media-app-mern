@@ -15,8 +15,18 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const userValidation = () => {
+    const passwRegex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+])[A-Za-z\d!@#$%^&*()\-_=+]{8,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (passwRegex.test(password)) return;
+    if (emailRegex.test(email)) return;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
     loginStart();
 
     await axios

@@ -31,6 +31,11 @@ const Home = () => {
     },
   };
 
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+
   useEffect(() => {
     const fetchPosts = async () => {
       fetching();

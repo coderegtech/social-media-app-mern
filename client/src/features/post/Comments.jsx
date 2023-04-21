@@ -59,7 +59,16 @@ const Comments = ({ postId, comments }) => {
           user_uid,
         }) => {
           return (
-            <div key={commentId} className="py-1 flex gap-x-3 items-start">
+            <div
+              key={commentId}
+              onClick={(e) => {
+                setActiveDelBtn({
+                  id: commentId,
+                  active: false,
+                });
+              }}
+              className="py-1 flex gap-x-3 items-start"
+            >
               <Link to={`/profile/${user_uid}`}>
                 <img
                   className="w-8 h-8 object-cover rounded-full"
@@ -71,7 +80,7 @@ const Comments = ({ postId, comments }) => {
               <div className="bg-white/10 rounded-2xl p-2 leading-[10px]">
                 <span className="text-[13px] text-white font-semibold">
                   <Link to={`/profile/${user_uid}`} className="hover:underline">
-                    {firstname} {surname} -
+                    {firstname} {surname}
                   </Link>{" "}
                   <span className="text-[10px] text-white/50">
                     {moment(createdAt).fromNow()}
@@ -86,12 +95,13 @@ const Comments = ({ postId, comments }) => {
                 } hover:bg-white/10 rounded-full p-1 relative`}
               >
                 <BsThreeDots
-                  onClick={() =>
+                  onClick={(e) => {
                     setActiveDelBtn({
                       id: commentId,
                       active: !activeDelBtn.active,
-                    })
-                  }
+                    });
+                    e.stopPropagation();
+                  }}
                   className="text-white/80 text-base"
                 />
 

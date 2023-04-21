@@ -32,7 +32,11 @@ const useStore = (set) => ({
 });
 
 const useAuthStore = create(
-  devtools(persist(useStore, { name: "currentUser" }))
+  devtools(
+    persist(useStore, {
+      name: "currentUser",
+    })
+  )
 );
 
 export default useAuthStore;
