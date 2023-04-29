@@ -34,22 +34,22 @@ const Header = () => {
           </form>
         </div>
         <ul className="flex gap-3 justify-center items-center ">
-          <li className="p-3 bg-stone-900 rounded-full">
+          <li className="p-2 md:p-3 bg-stone-900 rounded-full">
             <Link to="/">
               <AiFillHome className="text-lg md:text-xl text-white" />
             </Link>
           </li>
 
-          <li className="p-3 bg-stone-900 rounded-full">
+          <li className="p-2 md:p-3 bg-stone-900 rounded-full">
             <BsMessenger className="text-lg md:text-xl text-white" />
           </li>
-          <li className="p-3 bg-stone-900 rounded-full">
+          <li className="p-2 md:p-3 bg-stone-900 rounded-full">
             <RiNotification3Fill className="text-lg md:text-xl text-white" />
           </li>
           <li className="relative bg-stone-900 rounded-full">
             <img
               onClick={() => setDropDownMenu(!dropDownMenu)}
-              className="w-10 h-10 object-cover object-center rounded-full"
+              className="w-8 h-8 md:w-10 md:h-10 object-cover object-center rounded-full"
               src={`http://localhost:9999/profile/${currentUser?.profilePic}`}
               alt=""
             />

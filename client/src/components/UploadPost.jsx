@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsImages } from "react-icons/bs";
 import { MdClose } from "react-icons/md";
 import useAuthStore from "../features/auth/useAuthStore";
@@ -19,6 +19,14 @@ const UploadPost = ({ active, close }) => {
 
   const inputRef = useRef(null);
   const dropWrapperRef = useRef(null);
+
+  useEffect(() => {
+    if (active) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  });
 
   const onFileDragLeave = (e) => {
     e.preventDefault();
@@ -84,11 +92,11 @@ const UploadPost = ({ active, close }) => {
       onClick={close}
       className={`${
         active ? "block" : "hidden"
-      } fixed top-0 left-0 w-screen h-screen bg-black/80 z-50 flex items-center justify-center`}
+      } fixed top-0 left-0 w-screen h-screen bg-black/80 z-50 flex items-center justify-center `}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="max-w-md w-full h-auto bg-[#111] rounded-xl p-3 m-3"
+        className="max-w-md w-full h-auto bg-[#111] rounded-xl p-3 m-3 overflow-hidden"
       >
         <header className="w-full flex justify-between items-center border-b border-white/10 py-2">
           <h1 className="text-white text-2xl font-semibold">Create post</h1>
