@@ -81,7 +81,7 @@ const login = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
   try {
     const user_uid = req.body.user_uid;
     const foundUser = await User.findOne({ user_uid }).exec();
@@ -90,10 +90,12 @@ const logout = async (req, res) => {
     foundUser.accessToken = "";
     await foundUser.save();
 
+    next();
+
     return res.clearCookie("jwt").status(200).json("User has been logged out!");
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-export { signin, login, logout };
+export { login, logout, signin };

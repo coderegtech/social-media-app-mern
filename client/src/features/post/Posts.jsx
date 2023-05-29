@@ -12,7 +12,6 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import Loading from "../../components/Loading";
 import useAuthStore from "../auth/useAuthStore";
-import useUsersStore from "../users/useUsersStore";
 import Comments from "./Comments";
 import usePostsStore from "./usePostsStore";
 
@@ -22,9 +21,9 @@ const Posts = ({ posts }) => {
   const { currentUser, accessToken } = useAuthStore(
     (state) => state.currentUser
   );
-  const users = useUsersStore((state) => state.users);
-  const loading = useUsersStore((state) => state.loading);
-  const getUser = useUsersStore((state) => state.getUser);
+  // const users = useUsersStore((state) => state.users);
+  // const loading = useUsersStore((state) => state.loading);
+  // const getUser = useUsersStore((state) => state.getUser);
 
   const fetching = usePostsStore((state) => state.fetching);
   const isLoading = usePostsStore((state) => state.isLoading);
@@ -85,17 +84,7 @@ const Posts = ({ posts }) => {
         <Loading />
       ) : (
         posts?.map(
-          ({
-            postId,
-            post_description,
-            profilePic,
-            firstname,
-            surname,
-            user_uid,
-            postImgName,
-            createdAt,
-            comments,
-          }) => {
+          ({ postId, post_description, postImgName, createdAt, users }) => {
             return (
               <div
                 key={postId}
@@ -107,13 +96,13 @@ const Posts = ({ posts }) => {
                       className={`w-10 h-10 object-cover rounded-full ${
                         users.isOnline ? "border-2 border-green-700" : ""
                       }`}
-                      src={`http://localhost:9999/profile/${profilePic}`}
+                      src={`http://localhost:9999/profile/${users.profilePic}`}
                       alt=""
                     />
                     <div className="leading-none">
-                      <Link to={`/profile/${user_uid}`}>
+                      <Link to={`/profile/${users.user_uid}`}>
                         <p className="text-base text-white/80 font-semibold cursor-pointer">
-                          {firstname} {surname}
+                          {users.firstname} {users.surname}
                         </p>
                       </Link>
 
@@ -122,7 +111,7 @@ const Posts = ({ posts }) => {
                       </span>
                     </div>
                   </div>
-                  {currentUser.user_uid === user_uid ? (
+                  {currentUser.user_uid === users.user_uid ? (
                     <BsTrash
                       onClick={() => handleDeletePost(postId)}
                       className="text-white/80 text-lg hover:text-red-500"
@@ -179,7 +168,7 @@ const Posts = ({ posts }) => {
                   </div>
                   <div className="py-3">
                     {/* comments */}
-                    <Comments postId={postId} comments={comments} />
+                    <Comments postId={postId} />
 
                     <form
                       className=" py-2 flex gap-3 items-center"

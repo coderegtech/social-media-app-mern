@@ -5,6 +5,7 @@ import {
   deleteUserComment,
   deleteUserPost,
   getAllPosts,
+  getPostComments,
   getUserPost,
 } from "../controller/post.js";
 import upload from "../middleware/uploadPost.js";
@@ -18,6 +19,7 @@ router.delete("/deletePost/:id", verifyJWT, deleteUserPost);
 
 // comments
 router.post("/addComment", verifyJWT, addCommentPost);
+router.get("/comments", verifyJWT, getPostComments);
 router.delete("/deleteComment", verifyJWT, deleteUserComment);
 
 export default router;

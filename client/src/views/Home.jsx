@@ -43,6 +43,7 @@ const Home = () => {
       await axios
         .get(`${API_URL}/post/getAllPosts`, config)
         .then((response) => {
+          console.log(response.data);
           fetchAllPost(response.data);
         })
         .catch((err) => {

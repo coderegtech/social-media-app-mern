@@ -7,21 +7,9 @@ const postSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    user_uid: {
-      type: String,
-      required: true,
-    },
-    profilePic: {
-      type: String,
-      required: true,
-    },
-    firstname: {
-      type: String,
-      required: true,
-    },
-    surname: {
-      type: String,
-      required: true,
+    users: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     post_description: {
       type: String,
@@ -39,10 +27,12 @@ const postSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    comments: {
-      type: Array,
-      default: [],
-    },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamp: true }
 );
