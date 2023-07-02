@@ -15,15 +15,6 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const userValidation = () => {
-    const passwRegex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+])[A-Za-z\d!@#$%^&*()\-_=+]{8,}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (passwRegex.test(password)) return;
-    if (emailRegex.test(email)) return;
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -42,11 +33,13 @@ const Login = () => {
       )
       .then((response) => {
         loginSuccess(response.data);
+        console.log(response);
         navigate("/");
       })
       .catch((err) => {
         loginError(err);
-        console.log(err);
+        alert(err.response.data.message);
+        console.log(err.response.data.message);
       });
 
     setEmail("");

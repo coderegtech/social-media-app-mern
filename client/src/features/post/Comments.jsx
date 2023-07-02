@@ -29,7 +29,7 @@ const Comments = ({ postId }) => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      fetching();
+      // fetching();
       await axios
         .get(`${API_URL}/comments`, config)
         .then((result) => {
@@ -41,7 +41,7 @@ const Comments = ({ postId }) => {
         });
     };
 
-    if (!isLoading) fetchComments();
+    fetchComments();
   }, []);
 
   const deleteComment = async (commentId) => {

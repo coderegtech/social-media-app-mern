@@ -58,8 +58,6 @@ const Posts = ({ posts }) => {
 
   const handleAddComment = async (postId) => {
     try {
-      fetching();
-
       const response = await axios.post(
         `${API_URL}/addComment`,
         {
@@ -70,7 +68,6 @@ const Posts = ({ posts }) => {
       );
 
       addComment(response.data);
-
       setComment("");
       // insert the response data to post
     } catch (err) {
