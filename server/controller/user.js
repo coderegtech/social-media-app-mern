@@ -1,5 +1,17 @@
 import User from "../model/User.js";
 
+const currentUser = async (req, res) => {
+  try {
+    const user_uid = req.user_uid;
+
+    const currentUser = await User.findOne({ user_uid }).select("-password");
+
+    if (currentUser) res.status(200).json(currentUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const getUser = async (req, res) => {
   try {
     const { user_uid } = req.params;
@@ -23,4 +35,4 @@ const getAllUsers = async (req, res) => {
 
 const updateUser = (req, res) => {};
 
-export { getUser, updateUser, getAllUsers };
+export { currentUser, getAllUsers, getUser, updateUser };

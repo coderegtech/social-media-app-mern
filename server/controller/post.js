@@ -81,23 +81,15 @@ const addCommentPost = async (req, res) => {
 
     const post = await Post.findOne({ postId });
     const user = await User.findOne({ user_uid });
-
-    const addComment = await new Comment({
+    console.log(post, user);
+    const addComment = await Comment.create({
       user: user._id,
       post: post._id,
       comment,
       createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
     });
 
-    const postComment = await Comment.find()
-      .populate("posts")
-      .populate({
-        path: "users",
-        select: "-friends -posts -password -accessToken",
-      })
-      .sort("-createdAt");
-
-    if (addComment) res.status(201).json(postComment);
+    if (addComment) res.status(201).json("Post comment added");
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -105,10 +97,7 @@ const addCommentPost = async (req, res) => {
 
 const getPostComments = async (req, res) => {
   try {
-    const comments = await Comment.find()
-      .populate("posts")
-      .populate("users")
-      .sort("-createdAt");
+    const comments = await Comment.find().populate("posts").sort("-createdAt");
 
     console.log(comments);
 

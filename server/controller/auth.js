@@ -37,14 +37,15 @@ const login = async (req, res) => {
 
     // find email if existing
     const foundUser = await User.findOne({ email }).exec();
-    if (!foundUser) return res.status(404).json("User not found!");
+    if (!foundUser) return res.status(404).json({ message: "User not found!" });
 
     // verifyPassword
     const verifyPassword = bcrypt.compare(
       req.body.password,
       foundUser.password
     );
-    if (!verifyPassword) return res.status(400).json("Wrong password!");
+
+    if (!verifyPassword) return res.status(409).json("Wrong password!");
 
     // create JWTs
     const accessToken = jwt.sign(
@@ -66,6 +67,7 @@ const login = async (req, res) => {
     await foundUser.save();
 
     const currentUser = await User.findOne({ email }).select("-password");
+
     // Creates Secure Cookie with refresh token
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
